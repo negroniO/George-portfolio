@@ -96,10 +96,9 @@ prioritize outreach based on **expected recovered revenue**.
 
     c1, c2 = st.columns([1, 1])
     with c1:
-        if st.button("🔗 View GitHub Repo", key="payrec_repo"):
-            st.write(f"[Open repo]({PAYMENT_RECOVERY_REPO})")
-        if st.button("🌐 Open Live App", key="payrec_app"):
-            st.write(f"[Open app]({PAYMENT_RECOVERY_APP})")
+        st.link_button("🔗 View GitHub Repo", PAYMENT_RECOVERY_REPO)
+        st.link_button("🌐 Open Live App", PAYMENT_RECOVERY_APP)
+
     with c2:
         st.markdown(
             """
