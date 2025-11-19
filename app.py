@@ -118,6 +118,22 @@ div[role="radiogroup"] > label[data-selected="true"] {
     font-weight: 600 !important;
 }
 
+/* Hide ALL radio circles in sidebar navigation */
+
+/* Hides the native radio input */
+[data-testid="stSidebar"] input[type="radio"] {
+    display: none !important;
+}
+
+/* Hides the pseudo-element circle used by Streamlit internally */
+[data-testid="stSidebar"] div[role="radiogroup"] > label:before,
+[data-testid="stSidebar"] div[role="radiogroup"] > label:after {
+    display: none !important;
+    content: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
