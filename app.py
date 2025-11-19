@@ -86,15 +86,11 @@ CUSTOM_CSS = """
 
 /* ---------------- SIDEBAR NAV BUTTON STYLING ---------------- */
 
-/* Hide the original radio circle */
-div[role="radiogroup"] input[type="radio"] {
-    display: none !important;
-}
-
-/* Make each label look like a button */
-div[role="radiogroup"] > label {
+/* Make each radio label look like a full-width button */
+[data-testid="stSidebar"] div[role="radiogroup"] > label {
     background-color: #1e293b !important;
     padding: 10px 14px !important;
+    padding-left: 16px !important;  /* adjust after removing circle */
     border-radius: 8px !important;
     margin: 6px 0 !important;
     border: 1px solid #475569 !important;
@@ -105,39 +101,27 @@ div[role="radiogroup"] > label {
 }
 
 /* Hover effect */
-div[role="radiogroup"] > label:hover {
+[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
     background-color: #334155 !important;
     border-color: #64748b !important;
 }
 
 /* Selected button */
-div[role="radiogroup"] > label[data-selected="true"] {
+[data-testid="stSidebar"] div[role="radiogroup"] > label[data-selected="true"] {
     background-color: #0ea5e9 !important;
     border-color: #38bdf8 !important;
     color: white !important;
     font-weight: 600 !important;
 }
 
-/* Hide ALL radio circles in sidebar navigation */
-
-/* Hides the native radio input */
-[data-testid="stSidebar"] input[type="radio"] {
+/* Remove the radio SVG icons (Streamlit's new radio circles) */
+[data-testid="stSidebar"] svg {
     display: none !important;
-}
-
-/* Hides the pseudo-element circle used by Streamlit internally */
-[data-testid="stSidebar"] div[role="radiogroup"] > label:before,
-[data-testid="stSidebar"] div[role="radiogroup"] > label:after {
-    display: none !important;
-    content: none !important;
-    width: 0 !important;
-    height: 0 !important;
 }
 
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
 
 
 # -----------------------
@@ -174,7 +158,6 @@ st.sidebar.markdown(f"[LinkedIn]({LINKEDIN_URL})")
 st.sidebar.markdown(f"[Email](mailto:{EMAIL})")
 
 
-
 # -----------------------
 # TAG HELPER
 # -----------------------
@@ -183,7 +166,6 @@ def render_tags(tags_with_classes):
     for label, extra_cls in tags_with_classes:
         html += f"<span class='tag {extra_cls}'>{label}</span>"
     st.markdown(html, unsafe_allow_html=True)
-
 
 
 # -----------------------
@@ -241,7 +223,6 @@ This portfolio showcases projects where I:
     st.caption(f"👀 This page viewed **{st.session_state['page_views'].get('Home', 1)}** times this session.")
 
 
-
 # -----------------------
 # PROJECTS
 # -----------------------
@@ -270,7 +251,7 @@ Predict which failed transactions will be recovered and prioritize outreach by *
         """
     )
 
-    c1, c2 = st.columns([1,1])
+    c1, c2 = st.columns([1, 1])
     with c1:
         st.markdown(f"[🔗 GitHub Repo]({PAYMENT_RECOVERY_REPO})")
         st.markdown(f"[🌐 Live App]({PAYMENT_RECOVERY_APP})")
@@ -293,7 +274,7 @@ Predict which failed transactions will be recovered and prioritize outreach by *
     render_tags([
         ("Time Series", "tag-ml"),
         ("Finance", "tag-finance"),
-        ("DSO", "tag-finance")
+        ("DSO", "tag-finance"),
     ])
 
     st.write(
@@ -316,7 +297,7 @@ Forecast collections and DSO using **Prophet** to support planning and treasury.
     render_tags([
         ("SQL", "tag-sql"),
         ("BI", "tag-app"),
-        ("Finance", "tag-finance")
+        ("Finance", "tag-finance"),
     ])
 
     st.write(
@@ -331,7 +312,6 @@ SQL-based dashboards for AR, collections, and operational analysis.
 
     st.info("➡ Add BI/SQL repo here later.")
     st.markdown("</div>", unsafe_allow_html=True)
-
 
 
 # -----------------------
@@ -408,7 +388,6 @@ def render_skills_experience():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-
 # -----------------------
 # FINANCE USE CASES
 # -----------------------
@@ -443,7 +422,6 @@ def render_finance_use_cases():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-
 # -----------------------
 # CONTACT
 # -----------------------
@@ -464,7 +442,6 @@ def render_contact():
     st.write("If you viewed this portfolio, feel free to reach out or star a project you liked 🙂")
 
     st.markdown("</div>", unsafe_allow_html=True)
-
 
 
 # -----------------------
