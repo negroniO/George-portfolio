@@ -22,28 +22,29 @@ PAYMENT_RECOVERY_APP = "https://payment-recovery-ml.streamlit.app"
 # -----------------------
 CUSTOM_CSS = """
 <style>
-/* Global background + font tweaks */
-body {
-    background-color: #020617;
+/* Global text color for good contrast on dark theme */
+* {
+    color: #f8fafc !important;
 }
 
+/* Adjust body background */
 [data-testid="stAppViewContainer"] {
-    background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+    background: radial-gradient(circle at top, #1e293b 0%, #0f172a 60%);
 }
 
-/* Main content width + padding */
+/* Improve content visibility */
 .block-container {
     padding-top: 2.5rem;
     padding-bottom: 3rem;
 }
 
-/* Card layout */
+/* Card UI */
 .card {
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(30, 41, 59, 0.88);
     border-radius: 1.1rem;
     padding: 1.3rem 1.5rem;
     border: 1px solid rgba(148, 163, 184, 0.4);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.4);
     margin-bottom: 1.5rem;
 }
 
@@ -52,32 +53,18 @@ body {
     display: inline-block;
     padding: 0.15rem 0.6rem;
     border-radius: 999px;
-    font-size: 0.7rem;
-    font-weight: 500;
+    font-size: 0.75rem;
     margin-right: 0.25rem;
     margin-bottom: 0.25rem;
+    color: #f1f5f9 !important;
     border: 1px solid rgba(148, 163, 184, 0.7);
     background: rgba(15, 23, 42, 0.9);
 }
 
-/* Color accents by "category" */
-.tag-ml {
-    border-color: rgba(34, 197, 94, 0.8);
-}
-.tag-finance {
-    border-color: rgba(59, 130, 246, 0.85);
-}
-.tag-app {
-    border-color: rgba(244, 114, 182, 0.9);
-}
-.tag-sql {
-    border-color: rgba(250, 204, 21, 0.9);
-}
-
-/* Sidebar styling */
+/* Sidebar */
 [data-testid="stSidebar"] {
-    background: linear-gradient(to bottom, #020617, #020617);
-    border-right: 1px solid rgba(30, 64, 175, 0.8);
+    background: #0f172a;
+    border-right: 1px solid rgba(71, 85, 105, 0.8);
 }
 </style>
 """
