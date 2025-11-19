@@ -65,15 +65,12 @@ CUSTOM_CSS = """
 .tag-ml {
     border-color: rgba(34, 197, 94, 0.9);
 }
-
 .tag-finance {
     border-color: rgba(59, 130, 246, 0.9);
 }
-
 .tag-app {
     border-color: rgba(244, 114, 182, 0.9);
 }
-
 .tag-sql {
     border-color: rgba(250, 204, 21, 0.9);
 }
@@ -84,39 +81,25 @@ CUSTOM_CSS = """
     border-right: 1px solid rgba(71, 85, 105, 0.8);
 }
 
-/* ---------------- SIDEBAR NAV BUTTON STYLING ---------------- */
-
-/* Make each radio label look like a full-width button */
-[data-testid="stSidebar"] div[role="radiogroup"] > label {
-    background-color: #1e293b !important;
-    padding: 10px 14px !important;
-    padding-left: 16px !important;  /* adjust after removing circle */
-    border-radius: 8px !important;
-    margin: 6px 0 !important;
-    border: 1px solid #475569 !important;
-    cursor: pointer !important;
-    width: 100%;
-    transition: all 0.15s ease-in-out;
-    color: #e2e8f0 !important;
+/* Sidebar navigation buttons */
+.sidebar-nav-button {
+    background-color: #1e293b;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    text-align: left;
 }
-
-/* Hover effect */
-[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
-    background-color: #334155 !important;
-    border-color: #64748b !important;
+.sidebar-nav-button:hover {
+    background-color: #334155;
+    border-color: #64748b;
 }
-
-/* Selected button */
-[data-testid="stSidebar"] div[role="radiogroup"] > label[data-selected="true"] {
-    background-color: #0ea5e9 !important;
-    border-color: #38bdf8 !important;
-    color: white !important;
-    font-weight: 600 !important;
-}
-
-/* Remove the radio SVG icons (Streamlit's new radio circles) */
-[data-testid="stSidebar"] svg {
-    display: none !important;
+.sidebar-nav-button-active {
+    background-color: #0ea5e9;
+    border-color: #38bdf8;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 </style>
@@ -125,13 +108,26 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
 # -----------------------
-# SIDEBAR NAVIGATION
+# SIDEBAR NAVIGATION (BUTTONS, NO CIRCLES)
 # -----------------------
+PAGES = ["Home", "Projects", "Skills & Experience", "Finance Use Cases", "Contact"]
+
+if "page" not in st.session_state:
+    st.session_state["page"] = "Home"
+
 st.sidebar.title("Navigation")
-page = st.sidebar.radio(
-    "Go to",
-    ["Home", "Projects", "Skills & Experience", "Finance Use Cases", "Contact"],
-)
+st.sidebar.write("Go to")
+
+for p in PAGES:
+    # Style active vs inactive button using HTML + markdown
+    active = (st.session_state["page"] == p)
+    css_class = "sidebar-nav-button-active" if active else "sidebar-nav-button"
+
+    # Use markdown as a clickable button-like area
+    if st.sidebar.button(p, key=f"nav-{p}", use_container_width=True):
+        st.session_state["page"] = p
+
+page = st.session_state["page"]
 
 
 # -----------------------
@@ -143,11 +139,9 @@ if "page_views" not in st.session_state:
 st.session_state["page_views"][page] = st.session_state["page_views"].get(page, 0) + 1
 total_views = sum(st.session_state["page_views"].values())
 
-# Show analytics in the sidebar
 st.sidebar.markdown("---")
 st.sidebar.subheader("📊 Session Analytics")
 st.sidebar.write(f"Total page views: **{total_views}**")
-
 for p, v in st.session_state["page_views"].items():
     st.sidebar.write(f"- {p}: {v}")
 
@@ -172,8 +166,6 @@ def render_tags(tags_with_classes):
 # HOME
 # -----------------------
 def render_home():
-
-    # Banner
     st.markdown(
         """
         <p align="center">
@@ -187,7 +179,6 @@ def render_home():
     st.markdown("<h3 style='font-weight: 400;'>Data & Finance Analytics • FP&A • Machine Learning</h3>", unsafe_allow_html=True)
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-
     st.write(
         """
 I combine **finance**, **SQL**, and **machine learning** to build tools that improve
@@ -205,7 +196,6 @@ analytics directly to meaningful business problems.
 
     st.markdown("---")
     st.markdown("### 🔍 Portfolio Overview")
-
     st.write(
         """
 This portfolio showcases projects where I:
@@ -216,10 +206,8 @@ This portfolio showcases projects where I:
 - Focus on **finance analytics**: DSO, collections, recovery, AR  
         """
     )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Page view count
     st.caption(f"👀 This page viewed **{st.session_state['page_views'].get('Home', 1)}** times this session.")
 
 
@@ -229,17 +217,15 @@ This portfolio showcases projects where I:
 def render_projects():
     st.title("Projects")
 
-    # ---- Project 1 ----
+    # Project 1
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 1️⃣ Payment Recovery ML (End-to-End System)")
-
     render_tags([
         ("ML", "tag-ml"),
         ("Finance", "tag-finance"),
         ("Streamlit App", "tag-app"),
         ("SQL", "tag-sql"),
     ])
-
     st.write(
         """
 Predict which failed transactions will be recovered and prioritize outreach by **expected revenue**.
@@ -250,7 +236,6 @@ Predict which failed transactions will be recovered and prioritize outreach by *
 - Deployed as a Streamlit scoring app  
         """
     )
-
     c1, c2 = st.columns([1, 1])
     with c1:
         st.markdown(f"[🔗 GitHub Repo]({PAYMENT_RECOVERY_REPO})")
@@ -264,19 +249,16 @@ Predict which failed transactions will be recovered and prioritize outreach by *
             """,
             unsafe_allow_html=True,
         )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # ---- Project 2 ----
+    # Project 2
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 2️⃣ Finance Collections & DSO Forecasting")
-
     render_tags([
         ("Time Series", "tag-ml"),
         ("Finance", "tag-finance"),
         ("DSO", "tag-finance"),
     ])
-
     st.write(
         """
 Forecast collections and DSO using **Prophet** to support planning and treasury.
@@ -286,20 +268,17 @@ Forecast collections and DSO using **Prophet** to support planning and treasury.
 - Trend detection  
         """
     )
-
     st.info("➡ Add GitHub link when ready.")
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # ---- Project 3 ----
+    # Project 3
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 3️⃣ SQL Analytics & BI Dashboards")
-
     render_tags([
         ("SQL", "tag-sql"),
         ("BI", "tag-app"),
         ("Finance", "tag-finance"),
     ])
-
     st.write(
         """
 SQL-based dashboards for AR, collections, and operational analysis.
@@ -309,7 +288,6 @@ SQL-based dashboards for AR, collections, and operational analysis.
 - Tableau / Power BI dashboards  
         """
     )
-
     st.info("➡ Add BI/SQL repo here later.")
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -322,9 +300,7 @@ def render_skills_experience():
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Technical Skills")
-
     col1, col2 = st.columns(2)
-
     with col1:
         st.write(
             """
@@ -340,7 +316,6 @@ def render_skills_experience():
 - Calibration  
             """
         )
-
     with col2:
         st.write(
             """
@@ -357,12 +332,10 @@ def render_skills_experience():
 - Excel (advanced)  
             """
         )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Finance & Business Experience")
-
     st.write(
         """
 - FP&A: budgeting, variance analysis, forecasting  
@@ -371,12 +344,10 @@ def render_skills_experience():
 - Finance reporting and KPI dashboards  
         """
     )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Education")
-
     st.write(
         """
 - **IBM Data Science Certificate**  
@@ -384,7 +355,6 @@ def render_skills_experience():
 - **BSc – Economics**  
         """
     )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -395,7 +365,6 @@ def render_finance_use_cases():
     st.title("💼 Finance & Analytics Use Cases")
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-
     st.write(
         """
 ### 1️⃣ Payment Recovery & Collections  
@@ -418,7 +387,6 @@ def render_finance_use_cases():
 - SQL analytics  
         """
     )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -429,18 +397,13 @@ def render_contact():
     st.title("Contact & Links")
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-
     st.write("If you'd like to connect:")
-
     st.write(f"- **GitHub:** [@{GITHUB_USERNAME}](https://github.com/{GITHUB_USERNAME})")
     st.write(f"- **LinkedIn:** [George Iordanous]({LINKEDIN_URL})")
-
     if EMAIL:
         st.write(f"- **Email:** {EMAIL}")
-
     st.markdown("---")
     st.write("If you viewed this portfolio, feel free to reach out or star a project you liked 🙂")
-
     st.markdown("</div>", unsafe_allow_html=True)
 
 
