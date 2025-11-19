@@ -146,8 +146,9 @@ def render_home():
         unsafe_allow_html=True,
     )
 
-    st.title("Hi, I'm George 👋")
-    st.subheader("Data & Finance Analytics • FP&A • Machine Learning")
+    st.markdown("<h1 style='margin-bottom: 0.3rem;'>Hi, I'm George 👋</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='font-weight: 400;'>Data & Finance Analytics • FP&A • Machine Learning</h3>", unsafe_allow_html=True)
+
 
     with st.container():
         st.markdown("<div class='card'>", unsafe_allow_html=True)
