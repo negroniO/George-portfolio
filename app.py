@@ -22,23 +22,23 @@ PAYMENT_RECOVERY_APP = "https://payment-recovery-ml.streamlit.app"
 # -----------------------
 CUSTOM_CSS = """
 <style>
-/* Global text color for good contrast on dark theme */
+
+/* ---------------- GLOBAL TEXT COLOR ---------------- */
 * {
     color: #f8fafc !important;
 }
 
-/* Adjust body background */
+/* ---------------- BACKGROUND ---------------- */
 [data-testid="stAppViewContainer"] {
     background: radial-gradient(circle at top, #1e293b 0%, #0f172a 60%);
 }
 
-/* Improve content visibility */
 .block-container {
     padding-top: 2.5rem;
     padding-bottom: 3rem;
 }
 
-/* Card UI */
+/* ---------------- CARD UI ---------------- */
 .card {
     background: rgba(30, 41, 59, 0.88);
     border-radius: 1.1rem;
@@ -48,7 +48,7 @@ CUSTOM_CSS = """
     margin-bottom: 1.5rem;
 }
 
-/* Tag chips */
+/* ---------------- TAGS ---------------- */
 .tag {
     display: inline-block;
     padding: 0.15rem 0.6rem;
@@ -61,16 +61,39 @@ CUSTOM_CSS = """
     background: rgba(15, 23, 42, 0.9);
 }
 
-/* Sidebar */
+/* Tag color accents */
+.tag-ml {
+    border-color: rgba(34, 197, 94, 0.9);
+}
+
+.tag-finance {
+    border-color: rgba(59, 130, 246, 0.9);
+}
+
+.tag-app {
+    border-color: rgba(244, 114, 182, 0.9);
+}
+
+.tag-sql {
+    border-color: rgba(250, 204, 21, 0.9);
+}
+
+/* ---------------- SIDEBAR ---------------- */
 [data-testid="stSidebar"] {
     background: #0f172a;
     border-right: 1px solid rgba(71, 85, 105, 0.8);
 }
 
-/* --- SIDEBAR NAV: Make radio items look like buttons --- */
+/* ---------------- SIDEBAR NAV BUTTON STYLING ---------------- */
 
+/* Hide the original radio circle */
+div[role="radiogroup"] input[type="radio"] {
+    display: none !important;
+}
+
+/* Make each label look like a button */
 div[role="radiogroup"] > label {
-    background-color: #1e293b !important;   /* default button color */
+    background-color: #1e293b !important;
     padding: 10px 14px !important;
     border-radius: 8px !important;
     margin: 6px 0 !important;
@@ -78,6 +101,7 @@ div[role="radiogroup"] > label {
     cursor: pointer !important;
     width: 100%;
     transition: all 0.15s ease-in-out;
+    color: #e2e8f0 !important;
 }
 
 /* Hover effect */
@@ -86,7 +110,7 @@ div[role="radiogroup"] > label:hover {
     border-color: #64748b !important;
 }
 
-/* Selected (active) button */
+/* Selected button */
 div[role="radiogroup"] > label[data-selected="true"] {
     background-color: #0ea5e9 !important;
     border-color: #38bdf8 !important;
@@ -97,6 +121,7 @@ div[role="radiogroup"] > label[data-selected="true"] {
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
 
 
 # -----------------------
@@ -110,7 +135,7 @@ page = st.sidebar.radio(
 
 
 # -----------------------
-# SIMPLE SESSION ANALYTICS
+# SESSION ANALYTICS
 # -----------------------
 if "page_views" not in st.session_state:
     st.session_state["page_views"] = {}
@@ -133,24 +158,23 @@ st.sidebar.markdown(f"[LinkedIn]({LINKEDIN_URL})")
 st.sidebar.markdown(f"[Email](mailto:{EMAIL})")
 
 
+
 # -----------------------
 # TAG HELPER
 # -----------------------
 def render_tags(tags_with_classes):
-    """
-    tags_with_classes: list of (label, extra_class) pairs,
-    e.g. [("ML", "tag-ml"), ("Finance", "tag-finance")]
-    """
     html = ""
     for label, extra_cls in tags_with_classes:
         html += f"<span class='tag {extra_cls}'>{label}</span>"
     st.markdown(html, unsafe_allow_html=True)
 
 
+
 # -----------------------
 # HOME
 # -----------------------
 def render_home():
+
     # Banner
     st.markdown(
         """
@@ -164,43 +188,42 @@ def render_home():
     st.markdown("<h1 style='margin-bottom: 0.3rem;'>Hi, I'm George 👋</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='font-weight: 400;'>Data & Finance Analytics • FP&A • Machine Learning</h3>", unsafe_allow_html=True)
 
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
 
-    with st.container():
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.write(
-            """
+    st.write(
+        """
 I combine **finance**, **SQL**, and **machine learning** to build tools that improve
 collections, forecasting, and decision-making.
 
 I recently finished a **Master’s in Data Analytics in Accounting & Finance** and I'm working as an **FP&A analyst**, applying
-analytics directly to real business problems.
-            """
-        )
-
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Years in Finance / Analytics", "5+")
-        col2.metric("ML / Analytics Projects", "5+")
-        col3.metric("Tech Stack", "Python • SQL • BI")
-
-        st.markdown("---")
-        st.markdown("### 🔍 Portfolio Overview")
-
-        st.write(
-            """
-This portfolio highlights projects where I:
-
-- Build **SQL data models** and feature views  
-- Train and calibrate **ML models** for real business use cases  
-- Deploy **Streamlit apps** for interactive analytics  
-- Focus on **finance and payment analytics** (DSO, collections, recovery, AR)
-            """
-        )
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    # Optional: show current page view count on home
-    st.caption(
-        f"👀 This page viewed **{st.session_state['page_views'].get('Home', 1)}** times this session."
+analytics directly to meaningful business problems.
+        """
     )
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Years in Finance / Analytics", "5+")
+    col2.metric("ML / Analytics Projects", "5+")
+    col3.metric("Tech Stack", "Python • SQL • BI")
+
+    st.markdown("---")
+    st.markdown("### 🔍 Portfolio Overview")
+
+    st.write(
+        """
+This portfolio showcases projects where I:
+
+- Build **SQL data models**  
+- Develop **machine learning pipelines**  
+- Deploy **Streamlit apps** for real users  
+- Focus on **finance analytics**: DSO, collections, recovery, AR  
+        """
+    )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Page view count
+    st.caption(f"👀 This page viewed **{st.session_state['page_views'].get('Home', 1)}** times this session.")
+
 
 
 # -----------------------
@@ -209,93 +232,90 @@ This portfolio highlights projects where I:
 def render_projects():
     st.title("Projects")
 
-    # ---- Project 1: Payment Recovery ML ----
+    # ---- Project 1 ----
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 1️⃣ Payment Recovery ML (End-to-End System)")
-    render_tags(
-        [
-            ("ML", "tag-ml"),
-            ("Finance", "tag-finance"),
-            ("Streamlit App", "tag-app"),
-            ("SQL", "tag-sql"),
-        ]
-    )
+
+    render_tags([
+        ("ML", "tag-ml"),
+        ("Finance", "tag-finance"),
+        ("Streamlit App", "tag-app"),
+        ("SQL", "tag-sql"),
+    ])
 
     st.write(
         """
-**Goal:** Predict which failed / unpaid transactions will be recovered within 30 days and
-prioritize outreach based on **expected recovered revenue**.
+Predict which failed transactions will be recovered and prioritize outreach by **expected revenue**.
 
-- End-to-end ML pipeline (SQL → features → model → scoring → app)  
-- Calibrated Logistic Regression with PR AUC, Brier Score, lift analysis  
-- Expected value ranking: `amount × probability`  
-- Deployed Streamlit app for interactive scoring  
+- End-to-end ML pipeline  
+- Logistic Regression with calibration  
+- PR AUC, Brier score, lift analysis  
+- Deployed as a Streamlit scoring app  
         """
     )
 
-    c1, c2 = st.columns([1, 1])
+    c1, c2 = st.columns([1,1])
     with c1:
-        st.markdown(
-            f"[🔗 View GitHub Repo]({PAYMENT_RECOVERY_REPO})  \n"
-            f"[🌐 Open Live App]({PAYMENT_RECOVERY_APP})"
-        )
+        st.markdown(f"[🔗 GitHub Repo]({PAYMENT_RECOVERY_REPO})")
+        st.markdown(f"[🌐 Live App]({PAYMENT_RECOVERY_APP})")
     with c2:
         st.markdown(
             """
 <p align="center">
   <img src="https://raw.githubusercontent.com/negroniO/payment-recovery-ml/main/assets/demo.gif" width="95%" />
 </p>
-""",
+            """,
             unsafe_allow_html=True,
         )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # ---- Project 2: Finance Collections & DSO Forecasting ----
+    # ---- Project 2 ----
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 2️⃣ Finance Collections & DSO Forecasting")
-    render_tags(
-        [
-            ("Time Series", "tag-ml"),
-            ("Finance", "tag-finance"),
-            ("DSO", "tag-finance"),
-        ]
-    )
+
+    render_tags([
+        ("Time Series", "tag-ml"),
+        ("Finance", "tag-finance"),
+        ("DSO", "tag-finance")
+    ])
 
     st.write(
         """
-**Goal:** Forecast collections and **Days Sales Outstanding (DSO)** over time.
+Forecast collections and DSO using **Prophet** to support planning and treasury.
 
-- Time series modeling using **Prophet / time series tools**  
-- Uses AR / collections and invoice data  
-- Produces charts for expected cash inflows and DSO trends  
-- Helps finance teams anticipate cash flow and risk
+- Cash flow expectations  
+- DSO forecasting  
+- Trend detection  
         """
     )
-    st.info("➡ Add GitHub link for this project here once the repo is ready.")
+
+    st.info("➡ Add GitHub link when ready.")
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # ---- Project 3: SQL Analytics & BI Dashboards ----
+    # ---- Project 3 ----
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 3️⃣ SQL Analytics & BI Dashboards")
-    render_tags(
-        [
-            ("SQL", "tag-sql"),
-            ("BI", "tag-app"),
-            ("Finance", "tag-finance"),
-        ]
-    )
+
+    render_tags([
+        ("SQL", "tag-sql"),
+        ("BI", "tag-app"),
+        ("Finance", "tag-finance")
+    ])
 
     st.write(
         """
-**Goal:** Build analytical views and dashboards for AR, collections, and operations.
+SQL-based dashboards for AR, collections, and operational analysis.
 
-- Complex SQL with **window functions, aggregations, cohort logic**  
-- Data sources integrated into **Tableau / Power BI**  
-- Focus on: aging buckets, collection performance, payment behavior segmentation.
+- Window functions  
+- Cohort logic  
+- Tableau / Power BI dashboards  
         """
     )
-    st.info("➡ You can link to a 'sql-analytics' or 'bi-dashboards' repo here later.")
+
+    st.info("➡ Add BI/SQL repo here later.")
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # -----------------------
@@ -308,61 +328,69 @@ def render_skills_experience():
     st.markdown("### Technical Skills")
 
     col1, col2 = st.columns(2)
+
     with col1:
         st.write(
             """
 **Languages & Core:**
-- Python
-- SQL (PostgreSQL, Presto)
+- Python  
+- SQL (PostgreSQL, Presto)  
 - R (basic)
 
 **ML & Stats:**
-- scikit-learn
-- Time series (Prophet / forecasting)
-- Model evaluation (PR AUC, Brier, lift)
-- Probability calibration
+- scikit-learn  
+- Time series forecasting  
+- Model evaluation (PR AUC, Brier, Lift)  
+- Calibration  
             """
         )
+
     with col2:
         st.write(
             """
 **Data & Engineering:**
-- Pandas, NumPy
-- ETL & data cleaning
-- SQL feature engineering
-- APIs & automation scripts
+- Pandas, NumPy  
+- ETL & data cleaning  
+- SQL feature engineering  
+- API automation  
 
 **Apps & BI:**
-- Streamlit
-- Tableau
-- Power BI
-- Excel (advanced)
+- Streamlit  
+- Tableau  
+- Power BI  
+- Excel (advanced)  
             """
         )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Finance & Business Experience")
+
     st.write(
         """
-- **FP&A / Finance Analytics**: budgeting, variance analysis, forecasting  
-- **Credit control and collections**: failed payments, recovery strategies, DSO reduction  
-- **Payment operations**: card payments, providers, settlement, chargebacks  
-- **Reporting**: building dashboards and KPIs for senior stakeholders
+- FP&A: budgeting, variance analysis, forecasting  
+- Credit control & collections  
+- Payment operations: card payments, settlement, chargebacks  
+- Finance reporting and KPI dashboards  
         """
     )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Education")
+
     st.write(
         """
-- **IBM Data Science Certificate (via Coursera)**  
+- **IBM Data Science Certificate**  
 - **MSc – Data Analytics in Accounting & Finance**  
-- **BSc – Economics**
+- **BSc – Economics**  
         """
     )
+
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # -----------------------
@@ -372,32 +400,32 @@ def render_finance_use_cases():
     st.title("💼 Finance & Analytics Use Cases")
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
+
     st.write(
         """
-I focus on problems at the intersection of **finance operations** and **analytics**:
+### 1️⃣ Payment Recovery & Collections  
+- ML scoring  
+- Expected value ranking  
+- Prioritized outreach  
 
-### 1️⃣ Payment Recovery & Collections
-- Prioritizing failed card payments using ML  
-- Estimating probability of recovery and expected value  
-- Helping teams focus on the *right* customers
+### 2️⃣ DSO & Cash Flow Forecasting  
+- DSO modeling  
+- Cash inflow forecasts  
+- Help treasury & FP&A  
 
-### 2️⃣ DSO & Cash Flow Forecasting
-- Modeling DSO (Days Sales Outstanding) over time  
-- Projecting collections and expected cash inflows  
-- Supporting treasury and planning decisions
+### 3️⃣ Credit Control & Risk  
+- Behavior segmentation  
+- Early risk detection  
 
-### 3️⃣ Credit Control & Risk
-- Segmenting customers by payment behavior  
-- Identifying high-risk accounts early  
-- Building reporting around overdue balances
-
-### 4️⃣ BI & Self-Service Reporting
-- Automating manual Excel reports using Python + SQL  
-- Tableau / Power BI dashboards for AR, invoices, and collections  
-- Enabling non-technical stakeholders to explore data easily
+### 4️⃣ BI & Self-Service Reporting  
+- Automating Excel  
+- Tableau/Power BI dashboards  
+- SQL analytics  
         """
     )
+
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # -----------------------
@@ -407,24 +435,20 @@ def render_contact():
     st.title("Contact & Links")
 
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.write(
-        """
-If you’d like to connect, collaborate, or discuss data/ML roles in finance and analytics:
-        """
-    )
-    st.write(
-        f"""
-- **GitHub:** [@{GITHUB_USERNAME}](https://github.com/{GITHUB_USERNAME})  
-- **LinkedIn:** [George Iordanous]({LINKEDIN_URL})  
-        """
-    )
+
+    st.write("If you'd like to connect:")
+
+    st.write(f"- **GitHub:** [@{GITHUB_USERNAME}](https://github.com/{GITHUB_USERNAME})")
+    st.write(f"- **LinkedIn:** [George Iordanous]({LINKEDIN_URL})")
 
     if EMAIL:
         st.write(f"- **Email:** {EMAIL}")
 
     st.markdown("---")
     st.write("If you viewed this portfolio, feel free to reach out or star a project you liked 🙂")
+
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # -----------------------
