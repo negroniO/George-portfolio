@@ -199,7 +199,7 @@ def render_skills_experience():
 
     st.write(
         """
--  **IBM Data Science Certificate (via Coursera)*  
+-  **IBM Data Science Certificate (via Coursera)**  
 -  **MSc – Data Analytics in Accounting & Finance**  
 -  **BSc – Economics**
         """
