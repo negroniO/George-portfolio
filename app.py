@@ -11,10 +11,77 @@ st.set_page_config(
 
 GITHUB_USERNAME = "negroniO"
 LINKEDIN_URL = "https://www.linkedin.com/in/george-iordanous"
-EMAIL = "george.iordanous@hotmail.com"  
+EMAIL = "george.iordanous@hotmail.com"
 
 PAYMENT_RECOVERY_REPO = "https://github.com/negroniO/payment-recovery-ml"
 PAYMENT_RECOVERY_APP = "https://payment-recovery-ml.streamlit.app"
+
+
+# -----------------------
+# CUSTOM CSS (VISUAL UPGRADE)
+# -----------------------
+CUSTOM_CSS = """
+<style>
+/* Global background + font tweaks */
+body {
+    background-color: #020617;
+}
+
+[data-testid="stAppViewContainer"] {
+    background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+}
+
+/* Main content width + padding */
+.block-container {
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+}
+
+/* Card layout */
+.card {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 1.1rem;
+    padding: 1.3rem 1.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+    margin-bottom: 1.5rem;
+}
+
+/* Tag chips */
+.tag {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.9);
+}
+
+/* Color accents by "category" */
+.tag-ml {
+    border-color: rgba(34, 197, 94, 0.8);
+}
+.tag-finance {
+    border-color: rgba(59, 130, 246, 0.85);
+}
+.tag-app {
+    border-color: rgba(244, 114, 182, 0.9);
+}
+.tag-sql {
+    border-color: rgba(250, 204, 21, 0.9);
+}
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background: linear-gradient(to bottom, #020617, #020617);
+    border-right: 1px solid rgba(30, 64, 175, 0.8);
+}
+</style>
+"""
+st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
 # -----------------------
@@ -25,17 +92,51 @@ page = st.sidebar.radio(
     "Go to",
     ["Home", "Projects", "Skills & Experience", "Finance Use Cases", "Contact"],
 )
+
+
+# -----------------------
+# SIMPLE SESSION ANALYTICS
+# -----------------------
+if "page_views" not in st.session_state:
+    st.session_state["page_views"] = {}
+
+st.session_state["page_views"][page] = st.session_state["page_views"].get(page, 0) + 1
+total_views = sum(st.session_state["page_views"].values())
+
+# Show analytics in the sidebar
+st.sidebar.markdown("---")
+st.sidebar.subheader("📊 Session Analytics")
+st.sidebar.write(f"Total page views: **{total_views}**")
+
+for p, v in st.session_state["page_views"].items():
+    st.sidebar.write(f"- {p}: {v}")
+
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Connect with me:**")
 st.sidebar.markdown(f"[GitHub](https://github.com/{GITHUB_USERNAME})")
-st.sidebar.markdown(f"[LinkedIn]( {LINKEDIN_URL} )")
+st.sidebar.markdown(f"[LinkedIn]({LINKEDIN_URL})")
+st.sidebar.markdown(f"[Email](mailto:{EMAIL})")
+
+
+# -----------------------
+# TAG HELPER
+# -----------------------
+def render_tags(tags_with_classes):
+    """
+    tags_with_classes: list of (label, extra_class) pairs,
+    e.g. [("ML", "tag-ml"), ("Finance", "tag-finance")]
+    """
+    html = ""
+    for label, extra_cls in tags_with_classes:
+        html += f"<span class='tag {extra_cls}'>{label}</span>"
+    st.markdown(html, unsafe_allow_html=True)
 
 
 # -----------------------
 # HOME
 # -----------------------
 def render_home():
-    # Banner (optional local asset)
+    # Banner
     st.markdown(
         """
         <p align="center">
@@ -48,33 +149,41 @@ def render_home():
     st.title("Hi, I'm George 👋")
     st.subheader("Data & Finance Analytics • FP&A • Machine Learning")
 
-    st.write(
-        """
+    with st.container():
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.write(
+            """
 I combine **finance**, **SQL**, and **machine learning** to build tools that improve
 collections, forecasting, and decision-making.
 
-Recently, I completed a **Master’s in Data Analytics in Accounting & Finance** and I'm working as an **FP&A analyst**, applying
+I recently finished a **Master’s in Data Analytics in Accounting & Finance** and I'm working as an **FP&A analyst**, applying
 analytics directly to real business problems.
-        """
-    )
+            """
+        )
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Years in Finance / Analytics", "5+")
-    col2.metric("ML / Analytics Projects", "5+")
-    col3.metric("Tech Stack", "Python • SQL • BI")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Years in Finance / Analytics", "5+")
+        col2.metric("ML / Analytics Projects", "5+")
+        col3.metric("Tech Stack", "Python • SQL • BI")
 
-    st.markdown("---")
-    st.markdown("### 🔍 Portfolio Overview")
+        st.markdown("---")
+        st.markdown("### 🔍 Portfolio Overview")
 
-    st.write(
-        """
-This portfolio highlights a selection of projects where I:
+        st.write(
+            """
+This portfolio highlights projects where I:
 
 - Build **SQL data models** and feature views  
 - Train and calibrate **ML models** for real business use cases  
 - Deploy **Streamlit apps** for interactive analytics  
 - Focus on **finance and payment analytics** (DSO, collections, recovery, AR)
-        """
+            """
+        )
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # Optional: show current page view count on home
+    st.caption(
+        f"👀 This page viewed **{st.session_state['page_views'].get('Home', 1)}** times this session."
     )
 
 
@@ -84,7 +193,17 @@ This portfolio highlights a selection of projects where I:
 def render_projects():
     st.title("Projects")
 
+    # ---- Project 1: Payment Recovery ML ----
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 1️⃣ Payment Recovery ML (End-to-End System)")
+    render_tags(
+        [
+            ("ML", "tag-ml"),
+            ("Finance", "tag-finance"),
+            ("Streamlit App", "tag-app"),
+            ("SQL", "tag-sql"),
+        ]
+    )
 
     st.write(
         """
@@ -100,9 +219,10 @@ prioritize outreach based on **expected recovered revenue**.
 
     c1, c2 = st.columns([1, 1])
     with c1:
-        st.link_button("🔗 View GitHub Repo", PAYMENT_RECOVERY_REPO)
-        st.link_button("🌐 Open Live App", PAYMENT_RECOVERY_APP)
-
+        st.markdown(
+            f"[🔗 View GitHub Repo]({PAYMENT_RECOVERY_REPO})  \n"
+            f"[🌐 Open Live App]({PAYMENT_RECOVERY_APP})"
+        )
     with c2:
         st.markdown(
             """
@@ -112,10 +232,18 @@ prioritize outreach based on **expected recovered revenue**.
 """,
             unsafe_allow_html=True,
         )
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
-
+    # ---- Project 2: Finance Collections & DSO Forecasting ----
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 2️⃣ Finance Collections & DSO Forecasting")
+    render_tags(
+        [
+            ("Time Series", "tag-ml"),
+            ("Finance", "tag-finance"),
+            ("DSO", "tag-finance"),
+        ]
+    )
 
     st.write(
         """
@@ -128,10 +256,18 @@ prioritize outreach based on **expected recovered revenue**.
         """
     )
     st.info("➡ Add GitHub link for this project here once the repo is ready.")
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
-
+    # ---- Project 3: SQL Analytics & BI Dashboards ----
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### 3️⃣ SQL Analytics & BI Dashboards")
+    render_tags(
+        [
+            ("SQL", "tag-sql"),
+            ("BI", "tag-app"),
+            ("Finance", "tag-finance"),
+        ]
+    )
 
     st.write(
         """
@@ -143,6 +279,7 @@ prioritize outreach based on **expected recovered revenue**.
         """
     )
     st.info("➡ You can link to a 'sql-analytics' or 'bi-dashboards' repo here later.")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # -----------------------
@@ -151,6 +288,7 @@ prioritize outreach based on **expected recovered revenue**.
 def render_skills_experience():
     st.title("🛠 Skills & Experience")
 
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Technical Skills")
 
     col1, col2 = st.columns(2)
@@ -185,10 +323,10 @@ def render_skills_experience():
 - Excel (advanced)
             """
         )
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Finance & Business Experience")
-
     st.write(
         """
 - **FP&A / Finance Analytics**: budgeting, variance analysis, forecasting  
@@ -197,17 +335,18 @@ def render_skills_experience():
 - **Reporting**: building dashboards and KPIs for senior stakeholders
         """
     )
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("### Education")
-
     st.write(
         """
--  **IBM Data Science Certificate (via Coursera)**  
--  **MSc – Data Analytics in Accounting & Finance**  
--  **BSc – Economics**
+- **IBM Data Science Certificate (via Coursera)**  
+- **MSc – Data Analytics in Accounting & Finance**  
+- **BSc – Economics**
         """
     )
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # -----------------------
@@ -216,6 +355,7 @@ def render_skills_experience():
 def render_finance_use_cases():
     st.title("💼 Finance & Analytics Use Cases")
 
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.write(
         """
 I focus on problems at the intersection of **finance operations** and **analytics**:
@@ -241,6 +381,7 @@ I focus on problems at the intersection of **finance operations** and **analytic
 - Enabling non-technical stakeholders to explore data easily
         """
     )
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # -----------------------
@@ -249,14 +390,17 @@ I focus on problems at the intersection of **finance operations** and **analytic
 def render_contact():
     st.title("Contact & Links")
 
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.write(
         """
 If you’d like to connect, collaborate, or discuss data/ML roles in finance and analytics:
-
-- **GitHub:** [@%s](https://github.com/%s)
-- **LinkedIn:** [%s](%s)
         """
-        % (GITHUB_USERNAME, GITHUB_USERNAME, "George Iordanous", LINKEDIN_URL)
+    )
+    st.write(
+        f"""
+- **GitHub:** [@{GITHUB_USERNAME}](https://github.com/{GITHUB_USERNAME})  
+- **LinkedIn:** [George Iordanous]({LINKEDIN_URL})  
+        """
     )
 
     if EMAIL:
@@ -264,6 +408,7 @@ If you’d like to connect, collaborate, or discuss data/ML roles in finance and
 
     st.markdown("---")
     st.write("If you viewed this portfolio, feel free to reach out or star a project you liked 🙂")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # -----------------------
