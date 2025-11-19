@@ -29,7 +29,6 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("**Connect with me:**")
 st.sidebar.markdown(f"[GitHub](https://github.com/{GITHUB_USERNAME})")
 st.sidebar.markdown(f"[LinkedIn]( {LINKEDIN_URL} )")
-st.sidebar.markdown(f"[Email](mailto:{EMAIL})")
 
 
 # -----------------------
