@@ -66,6 +66,34 @@ CUSTOM_CSS = """
     background: #0f172a;
     border-right: 1px solid rgba(71, 85, 105, 0.8);
 }
+
+/* --- SIDEBAR NAV: Make radio items look like buttons --- */
+
+div[role="radiogroup"] > label {
+    background-color: #1e293b !important;   /* default button color */
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    margin: 6px 0 !important;
+    border: 1px solid #475569 !important;
+    cursor: pointer !important;
+    width: 100%;
+    transition: all 0.15s ease-in-out;
+}
+
+/* Hover effect */
+div[role="radiogroup"] > label:hover {
+    background-color: #334155 !important;
+    border-color: #64748b !important;
+}
+
+/* Selected (active) button */
+div[role="radiogroup"] > label[data-selected="true"] {
+    background-color: #0ea5e9 !important;
+    border-color: #38bdf8 !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
